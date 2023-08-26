@@ -1,4 +1,4 @@
-use crate::models::{Farkle, FarkleSolution};
+use crate::models::{Farkle, FarkleSolution, SolutionType};
 use rand::prelude::*;
 
 impl Farkle {
@@ -36,6 +36,7 @@ impl Farkle {
         let mut best_solution = FarkleSolution {
             points: 0,
             keep_index: vec![],
+            solution_type: SolutionType::None,
         };
 
         for i in 1..=6 {
@@ -46,9 +47,36 @@ impl Farkle {
                     if best_solution.points < points {
                         best_solution = FarkleSolution {
                             points,
-                            keep_index: vec![],
+                            keep_index: self.get_position_of_same_value(i),
+                            solution_type: SolutionType::MultipleOfDizes,
                         }
                     }
+                }
+            }
+        }
+
+        {
+            let mut points = 0;
+            let mut indexes: Vec<usize> = vec![];
+            for (index, dize_value) in self.roll_dize.iter().enumerate() {
+                points += match dize_value {
+                    1 => {
+                        indexes.push(index);
+                        100
+                    }
+                    5 => {
+                        indexes.push(index);
+                        50
+                    }
+                    _ => 0,
+                }
+            }
+
+            if best_solution.points < points {
+                best_solution = FarkleSolution {
+                    points,
+                    keep_index: indexes,
+                    solution_type: SolutionType::Singles,
                 }
             }
         }
@@ -67,8 +95,7 @@ impl Farkle {
         };
 
         let multipler = match amount_of_same {
-            1 => 0,
-            2 => 0,
+            1 | 2 => 0,
             3 => 1,
             4 => 2,
             5 => 4,
@@ -81,5 +108,17 @@ impl Farkle {
 
     fn count_duplicate_of_value(&self, value: usize) -> usize {
         self.roll_dize.iter().filter(|&n| *n == value).count()
+    }
+
+    fn get_position_of_same_value(&self, value: usize) -> Vec<usize> {
+        let mut pos: Vec<usize> = vec![];
+
+        for (index, dize) in self.roll_dize.iter().enumerate() {
+            if &value == dize {
+                pos.push(index);
+            }
+        }
+
+        pos
     }
 }
