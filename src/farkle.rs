@@ -1,5 +1,7 @@
+use std::ops::RangeInclusive;
+
 use crate::models::{Farkle, FarkleSolution, SolutionType};
-use rand::prelude::*;
+use rand::{prelude::*, seq::index};
 
 impl Farkle {
     pub fn new_hand() -> Farkle {
@@ -39,7 +41,7 @@ impl Farkle {
             solution_type: SolutionType::None,
         };
 
-        for i in 1..=6 {
+        for i in 1..=self.max_dizes {
             for j in 1..=6 {
                 if self.count_duplicate_of_value(i) == j {
                     let points = self.get_points_multiple(i, j);
@@ -77,6 +79,21 @@ impl Farkle {
                     points,
                     keep_index: indexes,
                     solution_type: SolutionType::Singles,
+                }
+            }
+        }
+
+        {
+            self.roll_dize.sort();
+            let indexes = (1..=self.max_dizes).collect::<Vec<usize>>();
+
+            if self.roll_dize.iter().eq(indexes.iter()) {
+                if best_solution.points < 1000 {
+                    best_solution = FarkleSolution {
+                        points: 1000,
+                        keep_index: indexes.iter().map(|f| f - 1).collect(),
+                        solution_type: SolutionType::Straight,
+                    }
                 }
             }
         }

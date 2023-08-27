@@ -18,4 +18,5 @@ pub enum SolutionType {
     None,
     MultipleOfDizes,
     Singles,
+    Straight,
 }
