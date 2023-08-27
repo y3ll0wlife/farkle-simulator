@@ -2,14 +2,14 @@ use crate::models::{Farkle, FarkleSolution, SolutionType};
 
 impl Farkle {
     fn count_duplicate_of_value(&self, value: usize) -> usize {
-        self.roll_dize.iter().filter(|&n| *n == value).count()
+        self.roll_dice.iter().filter(|&n| *n == value).count()
     }
 
     fn get_position_of_same_value(&self, value: usize) -> Vec<usize> {
         let mut pos: Vec<usize> = vec![];
 
-        for (index, dize) in self.roll_dize.iter().enumerate() {
-            if &value == dize {
+        for (index, dice) in self.roll_dice.iter().enumerate() {
+            if &value == dice {
                 pos.push(index);
             }
         }
@@ -35,8 +35,8 @@ impl Farkle {
         value * multipler
     }
 
-    pub fn check_for_multiple_dizes(&mut self) {
-        for i in 1..=self.max_dizes {
+    pub fn check_for_multiple_dices(&mut self) {
+        for i in 1..=self.max_dices {
             for j in 1..=6 {
                 if self.count_duplicate_of_value(i) == j {
                     let points = self.get_points_multiple(i, j);
@@ -45,7 +45,7 @@ impl Farkle {
                         self.best_solution = FarkleSolution {
                             points,
                             keep_index: self.get_position_of_same_value(i),
-                            solution_type: SolutionType::MultipleOfDizes,
+                            solution_type: SolutionType::MultipleOfdices,
                         }
                     }
                 }
@@ -54,9 +54,9 @@ impl Farkle {
     }
 
     pub fn check_for_straight(&mut self) {
-        let indexes = (1..=self.max_dizes).collect::<Vec<usize>>();
+        let indexes = (1..=self.max_dices).collect::<Vec<usize>>();
 
-        if self.roll_dize.iter().eq(indexes.iter()) {
+        if self.roll_dice.iter().eq(indexes.iter()) {
             if self.best_solution.points < 1000 {
                 self.best_solution = FarkleSolution {
                     points: 1000,
@@ -71,7 +71,7 @@ impl Farkle {
         let mut found_three_of_one = false;
         let mut indexes: Vec<usize> = vec![];
 
-        for i in 1..=self.max_dizes {
+        for i in 1..=self.max_dices {
             if self.count_duplicate_of_value(i) == 3 {
                 found_three_of_one = true;
                 indexes.append(&mut self.get_position_of_same_value(i));
@@ -83,7 +83,7 @@ impl Farkle {
         }
 
         let mut found_two_of_one = false;
-        for i in 1..=self.max_dizes {
+        for i in 1..=self.max_dices {
             if self.count_duplicate_of_value(i) == 2 {
                 found_two_of_one = true;
                 indexes.append(&mut self.get_position_of_same_value(i));
@@ -102,8 +102,8 @@ impl Farkle {
     pub fn check_for_singles(&mut self) {
         let mut points = 0;
         let mut indexes: Vec<usize> = vec![];
-        for (index, dize_value) in self.roll_dize.iter().enumerate() {
-            points += match dize_value {
+        for (index, dice_value) in self.roll_dice.iter().enumerate() {
+            points += match dice_value {
                 1 => {
                     indexes.push(index);
                     100

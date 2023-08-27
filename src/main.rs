@@ -12,15 +12,16 @@ fn main() {
     let mut i = 0;
 
     loop {
-        farkle.roll_dize();
+        farkle.roll_dice();
         i += 1;
 
         let solution = farkle.get_best_solution();
 
         match solution.solution_type {
-            SolutionType::FullHouse => {
+            SolutionType::None => {
                 println!("{:#?}", farkle);
                 println!("{}", i);
+
                 break;
             }
             _ => continue,

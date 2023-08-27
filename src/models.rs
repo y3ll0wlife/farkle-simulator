@@ -1,8 +1,8 @@
 #[derive(Debug)]
 pub struct Farkle {
-    pub max_dizes: usize,
-    pub keep_dize: Vec<usize>,
-    pub roll_dize: Vec<usize>,
+    pub max_dices: usize,
+    pub keep_dice: Vec<usize>,
+    pub roll_dice: Vec<usize>,
     pub current_score: usize,
     pub best_solution: FarkleSolution,
 }
@@ -27,7 +27,7 @@ impl FarkleSolution {
 #[derive(Debug, Clone)]
 pub enum SolutionType {
     None,
-    MultipleOfDizes,
+    MultipleOfdices,
     Singles,
     Straight,
     FullHouse,
