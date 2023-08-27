@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Farkle {
     pub max_dices: usize,
     pub keep_dice: Vec<usize>,
@@ -7,7 +7,7 @@ pub struct Farkle {
     pub best_solution: FarkleSolution,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct FarkleSolution {
     pub points: usize,
     pub keep_index: Vec<usize>,
@@ -24,7 +24,7 @@ impl FarkleSolution {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum SolutionType {
     None,
     MultipleOfdices,
